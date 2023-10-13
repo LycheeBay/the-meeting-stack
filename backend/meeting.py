@@ -4,12 +4,9 @@ from time import time
 import random
 
 class Meeting:
-    def __init__(self, name, attendees, id=None):
+    def __init__(self, name, attendees, id):
         self.name = name
-        if id == None:
-            self.id = random.randint(100000, 999999)
-        else:
-            self.id = id
+        self.id = id
         # assign date to be UNIX timestamp
         self.date = int(time())
         self.attendees = [attendees]
@@ -83,4 +80,3 @@ class Meetings:
                     self.meetings.remove(meeting)
         t = Thread(target=remove_timed_out_meetings)
         t.start()
-# END: 8f5d6hj3k7e9
