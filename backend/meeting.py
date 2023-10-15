@@ -12,35 +12,61 @@ class Meeting:
         self.attendees = [attendees]
         self.stack = []
         self.direct_response = []
+        self.reset_direct_response()
 
     def add_attendee(self, attendee):
+        self.date = int(time())
         if attendee not in self.attendees:
             self.attendees.append(attendee)
+            self.reset_direct_response()
             return True
         return False
 
     def remove_attendee(self, attendee):
+        self.date = int(time())
         self.attendees.remove(attendee)
+        self.reset_direct_response()
 
     def add_to_stack(self, attendee):
+        self.date = int(time())
         if attendee in self.attendees and attendee not in self.stack:
+            if len(self.stack) > 0:
+                if self.stack[-1] == attendee:
+                    return False
             self.stack.append(attendee)
             return True
         return False
     
     def remove_from_stack(self, attendee):
+        self.date = int(time())
         if attendee in self.stack:
+            # having concluded the most current discussion, reset direct response
+            if attendee == self.stack[0]:
+                self.reset_direct_response()
             self.stack.remove(attendee)
             return True
+        
         return False
     
+    def reset_direct_response(self):
+        self.date = int(time())
+        self.direct_response_made = {}
+        for attendee in self.attendees:
+            self.direct_response_made[attendee] = False
+
     def add_to_direct_response(self, attendee):
-        if attendee in self.attendees and attendee not in self.direct_response:
+        self.date = int(time())
+        if attendee in self.attendees and attendee not in self.direct_response and self.direct_response_made[attendee] == False:
+            if len(self.stack) > 0:
+                if self.stack[0] == attendee:
+                    return False
             self.direct_response.append(attendee)
+            self.direct_response_made[attendee] = True
             return True
         return False
     
     def remove_from_direct_response(self, attendee):
+        self.date = int(time())
         if attendee in self.direct_response:
             self.direct_response.remove(attendee)
             return True

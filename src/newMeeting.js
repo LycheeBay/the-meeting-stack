@@ -11,7 +11,7 @@ function NewMeeting() {
             <p>Enter Your Name:</p>
             <input type="text" />
             <br /><br />
-            <Button>Start Meeting</Button>
+            <Button href="/meeting">Start Meeting</Button>
             
         </div>
     )

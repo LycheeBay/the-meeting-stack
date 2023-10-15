@@ -5,6 +5,8 @@ import meeting
 app = Flask(__name__)
 CORS(app)
 meeting_list = meeting.Meetings()
+# initialize monitoring thread to remove timed-out meetings
+meeting_list.check_timed_out_meetings()
 
 # define a sample endpoint
 @app.route('/hello', methods=['GET'])
@@ -19,7 +21,7 @@ def new_meeting():
     if 'id' in request.json:
         if meeting_list.check_id_in_use(request.json['id']):
             return jsonify({'message': 'ID already in use!'})
-        new_meeting = meeting.Meeting(request.json['name'], request.json['attendees'], request.json['id'])
+        new_meeting = meeting.Meeting(request.json['name'], request.json['attendees'], int(request.json['id']))
     else:
         meeting_id = meeting_list.get_new_id()
         new_meeting = meeting.Meeting(request.json['name'], request.json['attendees'], meeting_id)
@@ -31,7 +33,7 @@ def new_meeting():
 def add_attendee():
     if not request.json or not 'meeting_id' in request.json or not 'name' in request.json:
         abort(400)
-    if meeting_list.join_meeting(request.json['meeting_id'], request.json['name']):
+    if meeting_list.join_meeting(int(request.json['meeting_id']), request.json['name']):
         return jsonify({'message': 'Attendee added!'})
     else:
         return jsonify({'message': 'Attendee not added!'})
@@ -42,7 +44,7 @@ def add_to_stack():
     if not request.json or not 'meeting_id' in request.json or not 'name' in request.json:
         abort(400)
     for meeting in meeting_list.meetings:
-        if meeting.id == request.json['meeting_id']:
+        if meeting.id == int(request.json['meeting_id']):
             if meeting.add_to_stack(request.json['name']):
                 return jsonify({'message': 'Attendee added to stack!'})
             else:
@@ -55,7 +57,7 @@ def remove_from_stack():
     if not request.json or not 'meeting_id' in request.json or not 'name' in request.json:
         abort(400)
     for meeting in meeting_list.meetings:
-        if meeting.id == request.json['meeting_id']:
+        if meeting.id == int(request.json['meeting_id']):
             if meeting.remove_from_stack(request.json['name']):
                 return jsonify({'message': 'Attendee removed from stack!'})
             else:
@@ -68,7 +70,7 @@ def add_to_direct_response():
     if not request.json or not 'meeting_id' in request.json or not 'name' in request.json:
         abort(400)
     for meeting in meeting_list.meetings:
-        if meeting.id == request.json['meeting_id']:
+        if meeting.id == int(request.json['meeting_id']):
             if meeting.add_to_direct_response(request.json['name']):
                 return jsonify({'message': 'Attendee added to direct response!'})
             else:
@@ -81,7 +83,7 @@ def remove_from_direct_response():
     if not request.json or not 'meeting_id' in request.json or not 'name' in request.json:
         abort(400)
     for meeting in meeting_list.meetings:
-        if meeting.id == request.json['meeting_id']:
+        if meeting.id == int(request.json['meeting_id']):
             if meeting.remove_from_direct_response(request.json['name']):
                 return jsonify({'message': 'Attendee removed from direct response!'})
             else:
@@ -94,7 +96,7 @@ def get_stack():
     if not request.json or not 'meeting_id' in request.json:
         abort(400)
     for meeting in meeting_list.meetings:
-        if meeting.id == request.json['meeting_id']:
+        if meeting.id == int(request.json['meeting_id']):
             return jsonify({'stack': meeting.stack})
     return jsonify({'message': 'Meeting not found!'})
 
@@ -104,7 +106,7 @@ def get_direct_response():
     if not request.json or not 'meeting_id' in request.json:
         abort(400)
     for meeting in meeting_list.meetings:
-        if meeting.id == request.json['meeting_id']:
+        if meeting.id == int(request.json['meeting_id']):
             return jsonify({'direct_response': meeting.direct_response})
     return jsonify({'message': 'Meeting not found!'})
 
@@ -114,7 +116,7 @@ def get_attendees():
     if not request.json or not 'meeting_id' in request.json:
         abort(400)
     for meeting in meeting_list.meetings:
-        if meeting.id == request.json['meeting_id']:
+        if meeting.id == int(request.json['meeting_id']):
             return jsonify({'attendees': meeting.attendees})
     return jsonify({'message': 'Meeting not found!'})
 
@@ -124,7 +126,7 @@ def get_name():
     if not request.json or not 'meeting_id' in request.json:
         abort(400)
     for meeting in meeting_list.meetings:
-        if meeting.id == request.json['meeting_id']:
+        if meeting.id == int(request.json['meeting_id']):
             return jsonify({'name': meeting.name})
     return jsonify({'message': 'Meeting not found!'})
 
@@ -139,7 +141,7 @@ def get_timeout():
     if not request.json or not 'meeting_id' in request.json:
         abort(400)
     for meeting in meeting_list.meetings:
-        if meeting.id == request.json['meeting_id']:
+        if meeting.id == int(request.json['meeting_id']):
             return jsonify({'timeout': meeting.date + meeting_list.timeout_interval})
     return jsonify({'message': 'Meeting not found!'})
 

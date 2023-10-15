@@ -4,6 +4,7 @@ import About from './about';
 import JoinMeeting from './joinMeeting';
 import NewMeeting from './newMeeting';
 import Home from './home';
+import Meeting from './meeting';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Route path="/new-meeting" element={<NewMeeting />} />
       <Route path="/join-meeting" element={<JoinMeeting />} />
       <Route path="/about" element={<About />} />
+      <Route path="/meeting" element={<Meeting />} />
       </Routes>
     </div>
   );
