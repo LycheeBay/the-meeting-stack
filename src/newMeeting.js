@@ -42,6 +42,7 @@ function NewMeeting() {
 
     useEffect(() => {
         localStorage.setItem("meeting_id", meetingId);
+        localStorage.setItem("name", username);
     }, [meetingId]);
 
     const newMeetingCall = (index) => {

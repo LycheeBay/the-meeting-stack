@@ -18,9 +18,11 @@ function JoinMeeting() {
 
     useEffect(() => {
         localStorage.setItem("meeting_id", meetingCode);
+        console.log(username);
+        localStorage.setItem("name", username);
     }, [meetingCode]);
 
-    const joinMeetingCall = (index) => {
+    const joinMeetingCall = () => {
         console.log(Constants.backendUrl);
         fetch(`${Constants.backendUrl}/join-meeting`, {
             method: 'POST',
