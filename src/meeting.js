@@ -1,60 +1,57 @@
 import React, { useState, useEffect } from 'react';
+import * as Constants from './constants'
 
 function Meeting() {
     const [stack, setStack] = useState([]);
     const [directResponse, setDirectResponse] = useState('');
+    const [meetingCode, setMeetingCode] = useState(localStorage.getItem("meeting_id"));
+    const [refreshStack, setRefreshStack] = useState(false);
 
     useEffect(() => {
-        fetch('/api/stack')
+        fetch(`${Constants.backendUrl}/get-stack`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "meeting_id": meetingCode})
+        })
             .then(response => response.json())
             .then(data => setStack([data.stack]));
 
-        fetch('/api/direct-response')
+            fetch(`${Constants.backendUrl}/get-direct-response`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "meeting_id": meetingCode})
+            })
             .then(response => response.json())
             .then(data => setDirectResponse(data.directResponse));
-    }, []);
+    }, [refreshStack]);
 
-    const addToStack = (item) => {
-        fetch('/api/stack', {
+    // const for add to stack
+
+    const addToStack = (index) => {
+        console.log(Constants.backendUrl);
+        fetch(`${Constants.backendUrl}/add-to-stack`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ item })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "meeting_id": meetingCode, "item": index })
         })
             .then(response => response.json())
-            .then(data => setStack([data.stack]));
+            .then(data => {
+                console.log(data);
+                console.log(data.message);
+                setStack(data.stack);
+            });
     };
 
-    const removeFromStack = (index) => {
-        fetch(`/api/stack/${index}`, {
-            method: 'POST'
-        })
-            .then(response => response.json())
-            .then(data => setStack(data.stack));
+    const handleRefreshStack = () => {
+        setRefreshStack(!refreshStack);
     };
-
+    
     return (
         <div>
             <h1>Meeting Stack</h1>
-            <h2>Direct Response: {directResponse}</h2>
-            <ul>
-                {stack.map((item, index) => (
-                    <li key={index}>{item} <button onClick={() => removeFromStack(index)}>Remove</button></li>
-                ))}
-            </ul>
-            <form onSubmit={(event) => {
-                event.preventDefault();
-                const item = event.target.elements.item.value;
-                addToStack(item);
-                event.target.reset();
-            }}>
-                <label>
-                    Add to Stack:
-                    <input type="text" name="item" />
-                </label>
-                <button type="submit">Add</button>
-            </form>
+            <p>Meeting Code: {meetingCode}</p>
+            <p>Stack: {stack}</p>
+            <button onClick={handleRefreshStack}>Refresh Stack</button>
         </div>
     );
 }

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import * as Constants from './constants'
 
-
 function JoinMeeting() {
     const [meetingCode, setMeetingCode] = useState('');
     const [username, setUsername] = useState('');
@@ -17,8 +16,13 @@ function JoinMeeting() {
         }
     }, [message]);
 
+    useEffect(() => {
+        localStorage.setItem("meeting_id", meetingCode);
+    }, [meetingCode]);
+
     const joinMeetingCall = (index) => {
-        fetch(/* Constants.backendUrl + */`http://127.0.0.1:5000/join_meeting`, {
+        console.log(Constants.backendUrl);
+        fetch(`${Constants.backendUrl}/join-meeting`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ "meeting_id": meetingCode, "name": username })

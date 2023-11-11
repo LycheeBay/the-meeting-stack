@@ -14,7 +14,7 @@ def hello():
     return jsonify({'message': 'Hello, World!'})
 
 # add a meeting, accepting two parameters
-@app.route('/new_meeting', methods=['POST'])
+@app.route('/new-meeting', methods=['POST'])
 def new_meeting():
     if not request.json or not 'name' in request.json or not 'attendees' in request.json:
         abort(400)
@@ -23,13 +23,13 @@ def new_meeting():
             return jsonify({'message': 'ID already in use!'})
         new_meeting = meeting.Meeting(request.json['name'], request.json['attendees'], int(request.json['id']))
     else:
-        meeting_id = meeting_list.get_new_id()
+        meeting_id = meeting_list.make_id()
         new_meeting = meeting.Meeting(request.json['name'], request.json['attendees'], meeting_id)
     meeting_list.add_meeting(new_meeting)
     return jsonify({'message': 'Meeting added!', 'meeting_id': new_meeting.id})
 
 # add an attendee to a meeting
-@app.route('/join_meeting', methods=['POST'])
+@app.route('/join-meeting', methods=['POST'])
 def add_attendee():
     if not request.json or not 'meeting_id' in request.json or not 'name' in request.json:
         abort(400)
@@ -39,7 +39,7 @@ def add_attendee():
         return jsonify({'message': 'Attendee not added!'})
     
 # add an attendee to a meeting's stack
-@app.route('/add_to_stack', methods=['POST'])
+@app.route('/add-to-stack', methods=['POST'])
 def add_to_stack():
     if not request.json or not 'meeting_id' in request.json or not 'name' in request.json:
         abort(400)
@@ -52,7 +52,7 @@ def add_to_stack():
     return jsonify({'message': 'Meeting not found!'})
 
 # remove an attendee from a meeting's stack
-@app.route('/remove_from_stack', methods=['POST'])
+@app.route('/remove-from-stack', methods=['POST'])
 def remove_from_stack():
     if not request.json or not 'meeting_id' in request.json or not 'name' in request.json:
         abort(400)
@@ -65,7 +65,7 @@ def remove_from_stack():
     return jsonify({'message': 'Meeting not found!'})
 
 # add an attendee to a meeting's direct response
-@app.route('/add_to_direct_response', methods=['POST'])
+@app.route('/add-to-direct-response', methods=['POST'])
 def add_to_direct_response():
     if not request.json or not 'meeting_id' in request.json or not 'name' in request.json:
         abort(400)
@@ -78,7 +78,7 @@ def add_to_direct_response():
     return jsonify({'message': 'Meeting not found!'})
 
 # remove an attendee from a meeting's direct response
-@app.route('/remove_from_direct_response', methods=['POST'])
+@app.route('/remove-from-direct-response', methods=['POST'])
 def remove_from_direct_response():
     if not request.json or not 'meeting_id' in request.json or not 'name' in request.json:
         abort(400)
@@ -91,7 +91,7 @@ def remove_from_direct_response():
     return jsonify({'message': 'Meeting not found!'})
 
 # get a meeting's stack
-@app.route('/get_stack', methods=['POST'])
+@app.route('/get-stack', methods=['POST'])
 def get_stack():
     if not request.json or not 'meeting_id' in request.json:
         abort(400)
@@ -101,7 +101,7 @@ def get_stack():
     return jsonify({'message': 'Meeting not found!'})
 
 # get a meeting's direct response
-@app.route('/get_direct_response', methods=['POST'])
+@app.route('/get-direct-response', methods=['POST'])
 def get_direct_response():
     if not request.json or not 'meeting_id' in request.json:
         abort(400)
@@ -111,7 +111,7 @@ def get_direct_response():
     return jsonify({'message': 'Meeting not found!'})
 
 # get a meeting's attendees
-@app.route('/get_attendees', methods=['POST'])
+@app.route('/get-attendees', methods=['POST'])
 def get_attendees():
     if not request.json or not 'meeting_id' in request.json:
         abort(400)
@@ -121,7 +121,7 @@ def get_attendees():
     return jsonify({'message': 'Meeting not found!'})
 
 # get a meeting's name
-@app.route('/get_name', methods=['POST'])
+@app.route('/get-name', methods=['POST'])
 def get_name():
     if not request.json or not 'meeting_id' in request.json:
         abort(400)
@@ -131,12 +131,12 @@ def get_name():
     return jsonify({'message': 'Meeting not found!'})
 
 # get the number of meetings in progress
-@app.route('/get_meeting_count', methods=['GET'])
+@app.route('/get-meeting-count', methods=['GET'])
 def get_meeting_count():
     return jsonify({'meeting_count': len(meeting_list.meetings)})
 
 # get timeout timestamp for a meeting
-@app.route('/get_timeout', methods=['POST'])
+@app.route('/get-timeout', methods=['POST'])
 def get_timeout():
     if not request.json or not 'meeting_id' in request.json:
         abort(400)
