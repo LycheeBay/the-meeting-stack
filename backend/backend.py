@@ -26,6 +26,7 @@ def new_meeting():
         meeting_id = meeting_list.make_id()
         new_meeting = meeting.Meeting(request.json['name'], request.json['attendees'], meeting_id)
     meeting_list.add_meeting(new_meeting)
+    new_meeting.reset_direct_response()
     return jsonify({'message': 'Meeting added!', 'meeting_id': new_meeting.id})
 
 # add an attendee to a meeting

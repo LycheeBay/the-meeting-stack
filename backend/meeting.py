@@ -40,9 +40,7 @@ class Meeting:
     def remove_from_stack(self, attendee):
         self.date = int(time())
         if attendee in self.stack:
-            # having concluded the most current discussion, reset direct response
-            if attendee == self.stack[0]:
-                self.reset_direct_response()
+            self.reset_direct_response()
             self.stack.remove(attendee)
             return True
         
@@ -57,9 +55,6 @@ class Meeting:
     def add_to_direct_response(self, attendee):
         self.date = int(time())
         if attendee in self.attendees and attendee not in self.direct_response and self.direct_response_made[attendee] == False:
-            if len(self.stack) > 0:
-                if self.stack[0] == attendee:
-                    return False
             self.direct_response.append(attendee)
             self.direct_response_made[attendee] = True
             return True

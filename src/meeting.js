@@ -6,7 +6,7 @@ function Meeting() {
     const [directResponse, setDirectResponse] = useState('');
     const [meetingCode, setMeetingCode] = useState(localStorage.getItem("meeting_id"));
     const [username, setUsername] = useState(localStorage.getItem("name"));
-    const [refreshStack, setRefreshStack] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const [addStack, setAddStack] = useState(false);
     const [addDirectResponse, setAddDirectResponse] = useState(false);
     const [message, setMessage] = useState('');
@@ -26,8 +26,8 @@ function Meeting() {
                 body: JSON.stringify({ "meeting_id": meetingCode})
             })
             .then(response => response.json())
-            .then(data => setDirectResponse(data.directResponse));
-    }, [refreshStack]);
+            .then(data => setDirectResponse(data.direct_response));
+    }, [refresh]);
 
     // const for add to stack
 
@@ -43,22 +43,81 @@ function Meeting() {
                 console.log(data);
                 console.log(data.message);
                 setMessage(data.message);
-                handleRefreshStack();
+                handleRefresh();
             });
     };
 
-    const handleRefreshStack = () => {
-        setRefreshStack(!refreshStack);
+    // const for remove from stack
+
+    const removeFromStack = () => {
+        console.log(Constants.backendUrl);
+        fetch(`${Constants.backendUrl}/remove-from-stack`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "meeting_id": meetingCode, "name": username })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                console.log(data.message);
+                setMessage(data.message);
+                handleRefresh();
+            });
+    };
+
+    // const for add direct response
+
+    const addToDirectResponse = () => {
+        console.log(Constants.backendUrl);
+        fetch(`${Constants.backendUrl}/add-to-direct-response`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "meeting_id": meetingCode, "name": username })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                console.log(data.message);
+                setMessage(data.message);
+                handleRefresh();
+            });
+    };
+
+    // const for remove from direct response
+
+    const removeFromDirectResponse = () => {
+        console.log(Constants.backendUrl);
+        fetch(`${Constants.backendUrl}/remove-from-direct-response`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "meeting_id": meetingCode, "name": username })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                console.log(data.message);
+                setMessage(data.message);
+                handleRefresh();
+            });
+    };
+
+
+    const handleRefresh = () => {
+        setRefresh(!refresh);
     };
     
     return (
         <div>
             <h1>Meeting Stack</h1>
+            <h3>You're joining as: {username}</h3>
             <p>Meeting Code: {meetingCode}</p>
             <p>{message !== '' && "Message: " + message}</p>
             <p>Stack: {stack}</p>
-            <button onClick={handleRefreshStack}>Refresh Stack</button>
+            <button onClick={handleRefresh}>Refresh</button>
             <button onClick={() => addToStack()}>Add to Stack</button>
+            <button onClick={() => removeFromStack()}>Remove from Stack</button>
+            <button onClick={() => addToDirectResponse()}>Add Direct Response</button>
+            <button onClick={() => removeFromDirectResponse()}>Remove Direct Response</button>
             <p>Direct Response: {directResponse}</p>
 
         </div>
