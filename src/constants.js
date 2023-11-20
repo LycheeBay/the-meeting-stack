@@ -1,4 +1,4 @@
 const isLocal = false;
-const backendUrl = isLocal ? `https://sandycreek.pythonanywhere.com/` : `https://myapp.com`;
+const backendUrl = isLocal ? `localhost:5000` : `https://sandycreek.pythonanywhere.com/`;
 
 export { backendUrl };
