@@ -16,6 +16,7 @@ function Home() {
         })
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 setNumMeetings(data.meeting_count);
             });
     };

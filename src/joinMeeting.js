@@ -1,11 +1,12 @@
 import Button from 'react-bootstrap/Button';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import * as Constants from './constants'
+import { NameContext } from './App';
 
 function JoinMeeting() {
     const [meetingCode, setMeetingCode] = useState('');
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useState(useContext(NameContext));
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ function JoinMeeting() {
     useEffect(() => {
         localStorage.setItem("meeting_id", meetingCode);
         console.log(username);
-        localStorage.setItem("name", username);
+        setUsername(username);
     }, [meetingCode]);
 
     const joinMeetingCall = () => {

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import * as Constants from './constants'
+import React, { useState, useEffect, useContext } from 'react';
+import * as Constants from './constants';
+import { NameContext } from './App';
 
 function Meeting() {
     const [stack, setStack] = useState([]);
     const [directResponse, setDirectResponse] = useState('');
     const [meetingCode, setMeetingCode] = useState(localStorage.getItem("meeting_id"));
-    const [username, setUsername] = useState(localStorage.getItem("name"));
+    const username = useContext(NameContext);
     const [refresh, setRefresh] = useState(false);
     const [addStack, setAddStack] = useState(false);
     const [addDirectResponse, setAddDirectResponse] = useState(false);
