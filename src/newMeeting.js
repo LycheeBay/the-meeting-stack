@@ -1,12 +1,11 @@
 import Button from 'react-bootstrap/Button';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import * as Constants from './constants'
-import { NameContext } from './App';
 
 function NewMeeting() {
     const [meetingName, setMeetingName] = useState('');
-    const [username, setUsername] = useState(useContext(NameContext));
+    const [username, setUsername] = useState('')
     const [message, setMessage] = useState('');
     const [meetingId, setMeetingId] = useState(-1);
     const navigate = useNavigate();
@@ -14,7 +13,7 @@ function NewMeeting() {
     useEffect(() => {
         if (message === 'Meeting added!') {
             console.log('Meeting added!');
-            navigate('/meeting');
+            navigate('/meeting/'+username);
         }
     }, [message]);
 
@@ -45,7 +44,6 @@ function NewMeeting() {
     };
 
     return (
-        <NameContext.Provider value={username}>
         <div className="App">
             <h1>To Create a New Meeting</h1>
             <p>Enter Meeting Name:</p>
@@ -56,7 +54,6 @@ function NewMeeting() {
             <br /><br />
             <Button onClick={handleNewMeeting}>New Meeting</Button>
         </div>
-        </NameContext.Provider>
     );
 }
 

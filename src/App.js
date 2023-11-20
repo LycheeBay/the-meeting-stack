@@ -8,14 +8,11 @@ import Meeting from './meeting';
 import './App.css';
 import { useContext, createContext } from 'react';
 
-export const NameContext = createContext('debug');
+export const NameContext = createContext('');
 
 function App() {
-  const username = useContext(NameContext);
-
   return (
     <div className="App">
-      <NameContext.Provider value={username}>
       <Routes>
       
       <Route path="/" element={<Home />} />
@@ -23,10 +20,9 @@ function App() {
       <Route path="/new-meeting" element={<NewMeeting />} />
       <Route path="/join-meeting" element={<JoinMeeting />} />
       <Route path="/about" element={<About />} />
-      <Route path="/meeting" element={<Meeting />} />
+      <Route path="/meeting/:username" element={<Meeting />} />
       
       </Routes>
-      </NameContext.Provider>
     </div>
   );
 }
