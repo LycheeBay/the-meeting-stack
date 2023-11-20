@@ -9,6 +9,11 @@ meeting_list = meeting.Meetings()
 meeting_list.check_timed_out_meetings()
 
 # define a sample endpoint
+@app.route('/', methods=['GET'])
+def hello_root():
+    return jsonify({'message': 'test'})
+
+# define a sample endpoint
 @app.route('/hello', methods=['GET'])
 def hello():
     return jsonify({'message': 'Hello, World!'})
